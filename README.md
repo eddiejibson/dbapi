@@ -5,6 +5,7 @@
 Secure and easy PHP database API. Requires less code to execute a query.
 
 -  [Example usage](https://gitlab.com/eddiejibson/dbapi/blob/master/example.php)
+-  [Follow me on Twitter](https://twitter.com/eddiejibson/)
 
 ## Enable the PDO driver
 
