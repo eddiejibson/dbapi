@@ -1,4 +1,5 @@
 ![DBAPI](https://media.giphy.com/media/oFyd7yendzmTO89MqI/giphy.gif)
+
 Secure and easy PHP database API. Requires less code to execute a simple query.
 - [Example usage](https://gitlab.com/eddiejibson/dbapi/blob/master/example.php)
 ## Enable the PDO driver
