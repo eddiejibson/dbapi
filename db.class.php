@@ -18,7 +18,7 @@ class db
         $user = ""; //Database username
         $pass = ""; //Database password
         $db = ""; //Database name
-        //DON'T CHANGE
+        //If you're not sure what this does, leave it. Should work fine as it is.
         $dsn="mysql:host={$host};dbname={$db}";
         try {
             $this->db = new PDO($dsn, $user, $pass);
