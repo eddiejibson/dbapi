@@ -1,5 +1,5 @@
 <?php
-include_once "db.class.php";
+require_once("db.class.php");
 
 //Get query will return the result e.g information about a user.
 $res = $db->getQuery("SELECT item FROM someTable WHERE something = :something", ["something" => $something]);
