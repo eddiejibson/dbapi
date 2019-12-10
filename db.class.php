@@ -1,9 +1,9 @@
 <?php
-class db
+class DB
 {
-    public function __construct()
+    public function __construct(string $hostname, string $db, string $username = null, string $password = null)
     {
-        $this->connect();
+        return $this->connect($hostname, $db, $username, $password);
     }
 
     public function __destruct()
@@ -11,49 +11,52 @@ class db
         $this->db = null;
     }
 
-    private function connect()
+    private function connect(string $hostname, string $db, string $user, string $password)
     {
-        //CHANGE DATABASE INFORMATION HERE
-        $host = "localhost"; //Database hostname. If unsure, leave it how it is.
-        $user = ""; //Database username
-        $pass = ""; //Database password
-        $db = ""; //Database name
-        //If you're not sure what this does, leave it. Should work fine as it is.
-        $dsn="mysql:host={$host};dbname={$db}";
+        $dsn="mysql:host={$hostname};dbname={$db}";
         try {
-            $this->db = new PDO($dsn, $user, $pass);
+            $this->db = new PDO($dsn, $username, $password);
             $this->db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
-            echo $e->getMessage();
-            // die();
+            throw new Exception($e);
         }
+        return $this->db;
     }
 
-    public function runQuery($sql, $args = [])
+    public function run($sql, $args = [])
     {
-        $count = $this->db->prepare($sql);
-        try {
-            $count = $count->execute($args);
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-            //die();
-        }
-        return $count;
+        return $this->prepare($sql, $args);
     }
-
-    public function getQuery($sql, $args = [])
-    {
+    
+    private function prepare($sql, $args) {
         $stmt = $this->db->prepare($sql);
         try {
             $stmt->execute($args);
+        } catch (PDOException $e) {
+            throw new Exception($e);
+        }
+        return $stmt;
+    }
+
+    public function get($sql, $args = [])
+    {
+        $stmt = $this->prepare($sql, $args);
+        try {
             $res = $stmt->fetchAll();
         } catch (PDOException $e) {
-            echo $e->getMessage();
-            // die();
+            throw new Exception($e);
+        }
+        return $res;
+    }
+    
+    public function getOne($sql, $args = []) {
+        $stmt = $this->prepare($sql, $args);
+        try {
+            $res = $stmt->fetchObject();
+        } catch (PDOException $e) {
+            throw new Exception($e);
         }
         return $res;
     }
 }
-
-$db = new db();
