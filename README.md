@@ -36,11 +36,11 @@ As this database API uses PDO, it must be enabled first. To do so, comment out (
 
 So that's uncommenting
 
-`;extension=php_pdo_mysql.dll`
+`;extension=php_pdo_mysql.dll` or `;extension=pdo_mysql`
 
 To
 
-`extension=php_pdo_mysql.dll`
+`extension=php_pdo_mysql.dll` or `extension=pdo_mysql`
 
 ## Security
 
