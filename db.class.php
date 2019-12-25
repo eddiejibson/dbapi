@@ -11,7 +11,7 @@ class DB
         $this->db = null;
     }
 
-    private function connect(string $hostname, string $db, string $user, string $password)
+    private function connect(string $hostname, string $db, string $username, string $password)
     {
         $dsn="mysql:host={$hostname};dbname={$db}";
         try {
