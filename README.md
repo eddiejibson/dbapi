@@ -1,4 +1,4 @@
-Secure and easy PHP database API. Requires less code to execute a query and does so securely!
+Secure and easy PHP database API for MySQL. Requires less code to execute a query and does so securely!
 
 -  [Follow me on Twitter](https://twitter.com/eddiejibson/)
 
