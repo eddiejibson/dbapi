@@ -1,10 +1,9 @@
 <?php
 class DB
 {
-    public function __construct(array $conn = []) //I will be getting this from the config file
-
+    public function __construct(string $hostname, string $db, string $username = null, string $password = null)
     {
-        return $this->connect(($conn["hostname"] ?? "127.0.0.1"), ($conn["database"] ?? "bother"), ($conn["username"] ?? "bother"), $conn["password"]);
+        return $this->connect($hostname, $db, $username, $password);
     }
 
     public function __destruct()
@@ -14,35 +13,28 @@ class DB
 
     private function connect(string $hostname, string $db, string $username, string $password)
     {
-        $dsn = "mysql:host={$hostname};dbname={$db}";
+        $dsn="mysql:host={$hostname};dbname={$db}";
         try {
             $this->db = new PDO($dsn, $username, $password);
             $this->db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-            $this->db->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
-        } catch (PDOException $e) { //All exceptions I am just catching and throwing, intending on perhaps handling it differently later (instead of just handling all exceptions the same way in the utils class)
+        } catch (PDOException $e) {
             throw new Exception($e);
         }
         return $this->db;
     }
 
-    public function run($sql, $args = [], $getId = false) //May need ID if for example collection creation is in same script as when it is referenced (user cannot submit)
-
+    public function run($sql, $args = [])
     {
-        return $this->prepare($sql, $args, $getId);
+        return $this->prepare($sql, $args);
     }
-
-    private function prepare($sql, $args, $getId = false)
-    {
+    
+    private function prepare($sql, $args) {
         $stmt = $this->db->prepare($sql);
         try {
             $stmt->execute($args);
         } catch (PDOException $e) {
             throw new Exception($e);
-        }
-        if ($getId) {
-            return (int) $this->db->lastInsertId();
         }
         return $stmt;
     }
@@ -57,9 +49,8 @@ class DB
         }
         return $res;
     }
-
-    public function getOne($sql, $args = [])
-    {
+    
+    public function getOne($sql, $args = []) {
         $stmt = $this->prepare($sql, $args);
         try {
             $res = $stmt->fetchObject();
